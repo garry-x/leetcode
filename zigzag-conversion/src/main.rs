@@ -41,8 +41,7 @@ impl Solution {
         let mut res = String::new();
 
         for i in 0..row_num {
-            let vec = &rows[i];
-            res += &(vec.into_iter().collect::<String>());
+            res += &((&rows[i]).into_iter().collect::<String>());
         }
 
         res
