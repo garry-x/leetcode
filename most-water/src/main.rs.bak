@@ -1,0 +1,40 @@
+pub struct Solution {}
+
+impl Solution {
+    pub fn max_area(height: Vec<i32>) -> i32 {
+        let mut max_area = 0;
+        let mut n1 = 0;
+        let mut n2 = 0;
+
+        while n1 < height.len() {
+            let h1 = height[n1];
+
+            if h1 == 0 {
+                continue;
+            }
+            
+            n2 = n1 + 1;
+            while n2 < height.len() {
+                let h2 = height[n2];
+                let a1 = (n2 - n1) * std::cmp::min(h1 as usize, h2 as usize);
+
+                if a1 > max_area {
+                    max_area = a1;
+                }
+
+                n2 += 1; 
+            }
+
+            n1 += 1;
+        }
+        
+        max_area as i32
+    }
+}
+
+fn main() {
+    assert!(49 == Solution::max_area(vec![1, 8, 6, 2, 5, 4, 8, 3, 7]));
+    assert!(1 == Solution::max_area(vec![1, 1]));
+    assert!(16 == Solution::max_area(vec![4, 3, 2, 1, 4]));
+    assert!(2 == Solution::max_area(vec![1, 2, 1]));
+}
