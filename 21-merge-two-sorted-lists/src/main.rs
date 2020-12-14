@@ -54,7 +54,7 @@ impl Solution {
         new_head.next
     }
 
-pub fn print_list(head: &Option<Box<ListNode>>) {
+    pub fn print_list(head: &Option<Box<ListNode>>) {
         let mut cur = head;
 
         while cur.is_some() {
