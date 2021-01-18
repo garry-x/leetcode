@@ -1,67 +1,27 @@
-use std::collections::HashMap;
-
 pub struct Solution {}
-
-struct Digit {
-    pos: Vec<(usize, usize)>,
-}
-
-impl Digit {
-    fn new() -> Digit {
-        Digit { pos: Vec::new() }
-    }
-
-    fn is_valid(&self, r: usize, c: usize) -> bool {
-        for (r1, c1) in self.pos.iter() {
-            if *r1 == r || *c1 == c {
-                return false;
-            }
-            if r1/3 == r/3 && c1/3 == c/3 {
-                return false;
-            }
-        }
-
-        true
-    }
-
-    fn add(&mut self, r: usize, c: usize) {
-        self.pos.push((r, c));
-    }
-}
 
 impl Solution {
     pub fn is_valid_sudoku(board: Vec<Vec<char>>) -> bool {
-        let mut map = HashMap::new();
-        let lines = board.len();
-
-        let mut r = 0;
-        let mut c = 0;
-
-        loop {
-            if r >= lines {
-                break;
-            }
-            
-            if board[r][c] != '.' {
-                let d = map.entry(board[r][c]).or_insert(Digit::new());
-
-                if !d.is_valid(r, c) {
-                    return false;
-                }
-            
-                d.add(r, c);
-            }
-            
-            c += 1;
-
-            if c >= lines {
-                r += 1;
-                c = 0;
+        for (i, value) in board.iter().flat_map(|v| v.iter()).enumerate() {
+            if *value != '.' && !is_valid(&board, i / 9, i % 9) {
+                return false;
             }
         }
-
         true
     }
+
+}
+
+fn is_valid(board: &Vec<Vec<char>>, r: usize, c: usize) -> bool {
+    
+    let value = board[r][c];
+    let line = board[r].iter().filter(|v| **v == value);
+    let column = board.iter().map(|v| v[c]).filter(|v| *v == value);
+
+    let (r, c) = ((r / 3) * 3, (c / 3) * 3);
+    let cube = board[r..r+3].iter().flat_map(|v| v[c..c+3].iter()).filter(|v| **v == value);
+
+    line.count() == 1 && column.count() == 1 && cube.count() ==1
 }
 
 fn main() {
