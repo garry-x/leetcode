@@ -4,46 +4,38 @@ const DIGITS: [char; 10] = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
 impl Solution {
     pub fn multiply(num1: String, num2: String) -> String {
-        // 1. multiply Nth(n-1 to 0) digit with num2
-        // 2. add result with shift
-        // 3. loop above to end 
-        let mut chrs_num1 = num1.chars().collect::<Vec<char>>();
-        chrs_num1.reverse();
+        let num1: String = num1.chars().rev().collect();
+        let num2: String = num2.chars().rev().collect();
 
-        let mut chrs_num2 = num2.chars().collect::<Vec<char>>();
-        chrs_num2.reverse();
-
-        let mut chrs_out: Vec<char> = Vec::new();
+        let mut out = String::new();
         let mut shift = 0;
         
-        for ch in chrs_num2.iter() {
-            chrs_out = str_add(chrs_out,
-                               str_mul(&chrs_num1, ch.to_digit(10).unwrap()),
-                               shift); 
+        for ch in num2.chars() {
+            out = str_add(&out,
+                          &str_mul(&num1, ch.to_digit(10).unwrap()),
+                          shift); 
             
             shift += 1;
         }
-        
-        // trim '0'
-        while chrs_out.len() > 1 && *chrs_out.last().unwrap() == '0' {
-            chrs_out.pop();
-        }
+         
+        out = out.chars().rev().collect::<String>().trim_start_matches('0').to_string();
 
-        chrs_out.reverse();
-        chrs_out.into_iter().collect::<String>()
+        match out.len() {
+            v if v == 0 => "0".to_string(),
+            _ => out,
+        }
     }
 }
 
-fn str_mul(chrs: &Vec<char>, d: u32) -> Vec<char> {
-    let mut out: Vec<char> = Vec::new(); 
-    assert!(chrs.len() >= 1); 
+fn str_mul(str1: &String, d: u32) -> String {
+    let mut out = String::new(); 
 
     if d == 0 {
-        return vec!['0'];
+        return "0".to_string();
     }
     
     let mut carry = 0;
-    for ch in chrs.iter() {
+    for ch in str1.chars() {
         let mut d1 = ch.to_digit(10).unwrap() * d + carry;
         
         carry = d1 / 10;
@@ -59,9 +51,12 @@ fn str_mul(chrs: &Vec<char>, d: u32) -> Vec<char> {
     out
 }
 
-fn str_add(chrs_num1: Vec<char>, 
-           chrs_num2: Vec<char>, shift: usize) -> Vec<char> {
-    let mut out: Vec<char> = Vec::new();
+fn str_add(str1: &String, 
+           str2: &String, shift: usize) -> String {
+    let chrs_num1: Vec<char> = str1.chars().collect();
+    let chrs_num2: Vec<char> = str2.chars().collect();
+
+    let mut out = String::new();
     let mut carry = 0;
     
     let mut i = 0; 
