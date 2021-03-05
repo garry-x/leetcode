@@ -43,7 +43,7 @@ pub fn solve_rec(n: usize, cols: &mut Vec<usize>) -> i32{
     let y = cols.len();
 
     'outer: for x in 0..n {
-        'inner: for (y1, &x1) in cols.iter().enumerate() {
+        for (y1, &x1) in cols.iter().enumerate() {
             if is_insight((x as i32, y as i32),
                           (x1 as i32, y1 as i32)) {
                 continue 'outer;
@@ -63,8 +63,10 @@ use std::time:: SystemTime;
 fn main() {
     let start = SystemTime::now();
     
-    println!("{}", Solution::total_n_queens(4)); 
-    println!("{}", Solution::total_n_queens(9)); 
+    assert_eq!(1, Solution::total_n_queens(1)); 
+    assert_eq!(0, Solution::total_n_queens(2)); 
+    assert_eq!(0, Solution::total_n_queens(3)); 
+    assert_eq!(2, Solution::total_n_queens(4)); 
 
     println!("Time elapsed:{} us", SystemTime::now().duration_since(start).unwrap().as_micros());
 }
