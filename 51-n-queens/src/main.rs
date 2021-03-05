@@ -2,9 +2,8 @@ pub struct Solution {}
 
 impl Solution {
     pub fn solve_n_queens(n: i32) -> Vec<Vec<String>> {
-        let mut cols: Vec<usize> = Vec::new();
         let mut out: Vec<Vec<String>>= Vec::new();
-        solve_rec(n as usize, &mut cols, &mut out);
+        solve_rec(n as usize, &mut Vec::new(), &mut out);
         out  
     }
 }
@@ -69,10 +68,11 @@ use std::time:: SystemTime;
 fn main() {
     let start = SystemTime::now();
    
-    print_board(&Solution::solve_n_queens(1));
-    print_board(&Solution::solve_n_queens(2));
-    print_board(&Solution::solve_n_queens(3));
-    print_board(&Solution::solve_n_queens(4));
+    //print_board(&Solution::solve_n_queens(1));
+    //print_board(&Solution::solve_n_queens(2));
+    //print_board(&Solution::solve_n_queens(3));
+    //print_board(&Solution::solve_n_queens(4));
+    print_board(&Solution::solve_n_queens(5));
     //print_board(&Solution::solve_n_queens(9));
 
     println!("Time elapsed:{} us", SystemTime::now().duration_since(start).unwrap().as_micros());
