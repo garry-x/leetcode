@@ -2,7 +2,18 @@ pub struct Solution {}
 
 impl Solution {
     pub fn my_sqrt(x: i32) -> i32 {
-        (x as f64).sqrt() as i32
+        // Newton Iteration
+        // f(x) = x^2 - n
+        // f'(x) = 2x
+        // x2 = 1/2(n/x1 - x1) + x1
+        let n = x as f64; 
+        let mut x = x as f64;
+
+        while (x * x  - n).abs() >= 1f64 {
+            x = (((n / x) - x) / 2f64) + x;
+        }
+
+        x as i32
     }
 }
 
