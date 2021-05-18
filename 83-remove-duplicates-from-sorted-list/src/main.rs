@@ -24,19 +24,15 @@ impl Solution {
 
         let mut map: HashMap<i32, i32> = HashMap::new();
         {
-            let mut cur = &head;
-            while cur.is_some() {
-                *map.entry(cur.as_ref().unwrap().val).or_insert(0) += 1;
-                cur = &cur.as_ref().unwrap().next;    
-            }
-        }
-
-        {
             let mut prev = &mut new_head;
             let mut cur = &head;
             while cur.is_some() {
                 let value = cur.as_ref().unwrap().val;
-                if *map.get(&value).unwrap() == 1 {
+                
+                let entry = map.entry(value).or_insert(0);
+                *entry += 1;
+                
+                if *entry == 1 {
                     *prev = Some(Box::new(ListNode::new(value)));
                     prev = &mut prev.as_mut().unwrap().next;
                 }
@@ -73,7 +69,7 @@ use std::time:: SystemTime;
 
 fn main() {
     let start = SystemTime::now();
-
+    
     print_list(&Solution::delete_duplicates(make_list(&vec![1, 2, 3, 3, 4, 4, 5], 0)));
     print_list(&Solution::delete_duplicates(make_list(&vec![], 0)));
     print_list(&Solution::delete_duplicates(make_list(&vec![1, 1, 2, 2, 3, 4], 0)));
