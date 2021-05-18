@@ -8,6 +8,11 @@ fi
 prob_name=$1
 prob_id=$2
 
+if [ -d "${prob_id}-${prob_name}" ]; then 
+   echo "solution already exists"
+   exit 0 
+fi
+
 # create project
 cargo new --bin --vcs none $prob_name
 
