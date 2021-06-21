@@ -1,42 +1,36 @@
 pub struct Solution {}
 
-use std::collections::HashMap;
-
 impl Solution {
     pub fn num_decodings(s: String) -> i32 {
-        num_decode_itr(&s.chars().collect::<Vec<char>>(), &mut HashMap::new(), 0)
-    }
-}
-
-pub fn num_decode_itr(chrs: &[char], map: &mut HashMap<usize, i32>,
-                      base: usize) -> i32{
-    if chrs.len() == 0 {
-        return 1;
-    }
-
-    if chrs[0] == '0' {
-        return 0;
-    }
-
-    if let Some(&v) = map.get(&base) {
-        return v;
-    }
-
-    // 'eat' 1 number
-    let mut res = num_decode_itr(&chrs[1..], map, base + 1);     
-
-    if chrs.len() >= 2 {
-        // 'eat' 2 number
-        let v = chrs[0].to_digit(10).unwrap() * 10 + 
-                chrs[1].to_digit(10).unwrap();
-        if v <= 26 {
-            res += num_decode_itr(&chrs[2..], map, base + 2);
+        let chars: Vec<char> = s.chars().collect();
+        if chars[0] == '0' {
+            return 0;
         }
+
+        let mut dp: Vec<i32> = vec![0; chars.len()];
+        dp[0] = 1;
+        
+        for i in 1..dp.len() {
+            // decode single 
+            dp[i] = match chars[i] {
+                '0' => 0,
+                _ => dp[i - 1],
+            };
+
+            if chars[i - 1] == '0' {
+                continue;
+            }
+
+            // decode double
+            let tmp = chars[i - 1].to_digit(10).unwrap() * 10 +
+                      chars[i].to_digit(10).unwrap();
+            if tmp <= 26 {
+                dp[i] += if i > 1 { dp[i - 2] } else { 1 };
+            }
+        }
+
+        dp[dp.len() - 1]
     }
-
-    map.insert(base, res);
-
-    res
 }
 
 use std::time::SystemTime;
